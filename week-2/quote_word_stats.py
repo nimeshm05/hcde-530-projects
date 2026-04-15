@@ -7,13 +7,13 @@ def count_words(text: str) -> int:
 
 
 def main() -> None:
-    # code that finds the csv file
+    # code that finds the csv file and reads it
     csv_path = Path(__file__).resolve().parent / "quotes.csv"
 
-    # code that counts the words in the csv file
+    # code that defines a list of tuples to store the results
     rows: list[tuple[str, int]] = []
 
-    # code that reads the csv file
+    # code that reads the csv file and stores the results in a list of tuples
     with open(csv_path, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             rows.append((row["author"], count_words(row["quote"])))
@@ -29,7 +29,7 @@ def main() -> None:
     print("Quote word counts")
     print("-" * 40)
 
-    # code that prints the words in the csv file
+    # code that prints the words in the csv file and the author name
     for author, n in rows:
         print(f"  {n:2}  {author}")
     print()
