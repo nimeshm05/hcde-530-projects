@@ -1,0 +1,19 @@
+# HCDE 530 — project context
+
+Coursework and demos live under `week-*` folders (e.g. `week-2/`). Prefer small, focused scripts and data files that match assignment prompts.
+
+## Documentation convention
+
+For **every new** hand-authored project file you add under `week-*` (for example `.py`, `.csv`, `.json`, notebooks), create a **companion markdown file in the same directory** with the **same basename**:
+
+- `foo.py` → `foo.md`
+- `data.csv` → `data.md`
+
+Each companion `.md` should briefly state: **purpose**, **inputs/dependencies**, **how to run or use**, and **outputs** (if any). Update the `.md` when the paired file’s behavior changes.
+
+Config-only root files (such as `.cursorrules`) do not require a paired `.md` unless you want one.
+
+## AI / editor behavior
+
+- Match existing patterns in the nearest `week-*` folder (imports, CSV handling, print style).
+- When adding a new script or data file, add or update its paired `.md` in the same commit or change set.
