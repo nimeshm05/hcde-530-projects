@@ -1,5 +1,71 @@
 import csv
 
+
+def print_department_breakdown(rows):
+    """Print how many responses fall under each department (stdout).
+
+    ``rows`` is a list of row dicts from ``csv.DictReader`` on ``week3_survey_messy.csv``.
+    For each row, reads ``department``: strips whitespace and applies ``.title()`` so
+    values like ``DESIGN`` and ``Design`` merge. Prints a header, then one line per
+    department in alphabetical order: ``  <Department>: <count>``. Rows with a
+    missing or empty department are counted under an empty label (after strip/title).
+    """
+    counts = {}
+    for row in rows:
+        dept = (row.get("department") or "").strip().title()
+        counts[dept] = counts.get(dept, 0) + 1
+
+    print("\nResponses by department:")
+    for dept, count in sorted(counts.items()):
+        print(f"  {dept}: {count}")
+
+
+def print_primary_tool_counts(rows):
+    """Print how many respondents named each primary tool (stdout).
+
+    ``rows`` is a list of row dicts from ``csv.DictReader``. Reads ``primary_tool``,
+    strips and ``.title()`` so ``figma`` and ``Figma`` count together. Prints a header
+    then one line per tool sorted alphabetically: ``  <Tool>: <count>``. Empty
+    tools are grouped under an empty label.
+    """
+    counts = {}
+    for row in rows:
+        tool = (row.get("primary_tool") or "").strip().title()
+        counts[tool] = counts.get(tool, 0) + 1
+
+    print("\nResponses by primary tool:")
+    for tool, count in sorted(counts.items()):
+        print(f"  {tool}: {count}")
+
+
+def print_low_satisfaction_alerts(rows, threshold=2):
+    """Print survey rows whose satisfaction score is at or below a threshold (stdout).
+
+    ``rows`` is a list of row dicts. Reads ``satisfaction_score``; if it is empty after
+    strip, the row is skipped. If the value is not a valid integer, the row is skipped
+    (no crash). For integer scores ``<= threshold`` (default ``2``), prints one line
+    with ``response_id``, ``participant_name``, and score. Prints a section header first;
+    if no rows qualify, prints ``(none found)`` on one line.
+    """
+    print(f"\nLow satisfaction alerts (score <= {threshold}):")
+    found = False
+    for row in rows:
+        raw = (row.get("satisfaction_score") or "").strip()
+        if not raw:
+            continue
+        try:
+            score = int(raw)
+        except ValueError:
+            continue
+        if score <= threshold:
+            found = True
+            rid = (row.get("response_id") or "").strip()
+            name = (row.get("participant_name") or "").strip()
+            print(f"  {rid} | {name} | {score}")
+    if not found:
+        print("  (none found)")
+
+
 # Load the survey data from a CSV file
 filename = "week3_survey_messy.csv"
 rows = []
@@ -53,3 +119,7 @@ top5 = scored_rows[:5]
 print("\nTop 5 satisfaction scores:")
 for name, score in top5:
     print(f"  {name}: {score}")
+
+print_department_breakdown(rows)
+print_primary_tool_counts(rows)
+print_low_satisfaction_alerts(rows)
