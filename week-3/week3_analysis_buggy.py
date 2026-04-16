@@ -31,6 +31,7 @@ for row in rows:
     try:
         total_experience += int(row["experience_years"])
         valid_experience_rows += 1
+    # skip rows with invalid experience values
     except (TypeError, ValueError):
         continue
 
