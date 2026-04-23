@@ -93,12 +93,14 @@ for role, count in sorted(role_counts.items()):
 # Calculate the average years of experience
 total_experience = 0
 valid_experience_rows = 0
+invalid_experience_ids = []
 for row in rows:
     try:
         total_experience += int(row["experience_years"])
         valid_experience_rows += 1
     # skip rows with invalid experience values
     except (TypeError, ValueError):
+        invalid_experience_ids.append((row.get("response_id") or "").strip())
         continue
 
 if valid_experience_rows:
@@ -106,19 +108,35 @@ if valid_experience_rows:
     print(f"\nAverage years of experience: {avg_experience:.1f}")
 else:
     print("\nAverage years of experience: N/A (no valid numeric values)")
+if invalid_experience_ids:
+    print(
+        "Skipped rows with invalid experience_years: "
+        f"{len(invalid_experience_ids)} ({', '.join(invalid_experience_ids)})"
+    )
 
 # Find the top 5 highest satisfaction scores
 scored_rows = []
+invalid_score_ids = []
 for row in rows:
     if row["satisfaction_score"].strip():
-        scored_rows.append((row["participant_name"], int(row["satisfaction_score"])))
+        try:
+            scored_rows.append((row["participant_name"], int(row["satisfaction_score"])))
+        except ValueError:
+            # Skip rows with invalid satisfaction score and add the row ID to the list to be printed later
+            invalid_score_ids.append((row.get("response_id") or "").strip())
 
+# Sort the scored rows by satisfaction score in descending order (highest to lowest) - Corrected the logic issue of showing the bottom 5 satisfaction scores instead of the top 5
 scored_rows.sort(key=lambda x: x[1], reverse=True)
 top5 = scored_rows[:5]
 
 print("\nTop 5 satisfaction scores:")
 for name, score in top5:
     print(f"  {name}: {score}")
+if invalid_score_ids:
+    print(
+        "Skipped rows with invalid satisfaction_score: "
+        f"{len(invalid_score_ids)} ({', '.join(invalid_score_ids)})"
+    )
 
 print_department_breakdown(rows)
 print_primary_tool_counts(rows)
