@@ -1,0 +1,2 @@
+# Optional but recommended on macOS so HTTPS to openfoodfacts.org verifies certificates.
+certifi>=2024.0.0
