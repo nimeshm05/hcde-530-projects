@@ -47,6 +47,8 @@ def fetch_search_page(params: dict) -> dict:
 
 
 def main() -> None:
+    # The following code is the main function that fetches the search page and prints the results.
+    # The code is a try-except block that catches any errors that occur during the search.
     # Query parameters: English category label plus optional sort (see OFF search tutorial).
     # "fields" limits each product object so the JSON stays small; we still ask for
     # nutrition_grades so each row can show a Nutri-Score letter when OFF has computed it.
@@ -72,7 +74,7 @@ def main() -> None:
     print(f"Products on this page: {len(products)}")
     print()
 
-    # We pull at least three fields from each product for the assignment:
+    # We pull at least three fields from each product (Yogurt products):
     # - code: barcode (unique id in OFF)
     # - product_name: what the product is called
     # - nutrition_grades: Nutri-Score letter when OFF has one for that product
@@ -90,6 +92,7 @@ def main() -> None:
         print(f"    category (leaf): {leaf}")
         print()
 
+    # The below code writes the rows to a CSV file.
     OUTPUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_CSV.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
