@@ -1,7 +1,13 @@
 # C4 — APIs and Data Acquisition
 
-I met this competency with `openfoodfacts_search.py` in this folder. I read the [Open Food Facts API tutorial](https://openfoodfacts.github.io/openfoodfacts-server/api/tutorial-off-api/) to choose the **v2 search** endpoint (`GET https://world.openfoodfacts.org/api/v2/search`) instead of the class demo API. That endpoint accepts query parameters (for example `categories_tags_en`, optional `sort_by`, `page_size`, and a comma-separated `fields` list) and returns **JSON** with a total **`count`**, pagination metadata, and a **`products`** array. Each product object only includes the keys I requested in `fields`, so the response stays small and predictable.
+I met this competency with `openfoodfacts_search.py` in this folder by building a **yogurt-focused API workflow**. I used the Open Food Facts v2 search endpoint (`GET https://world.openfoodfacts.org/api/v2/search`) and set `categories_tags_en=Yogurt` so the query targets yogurt products specifically. I also used `sort_by=last_modified_t` and `page_size=10` to return one small, recent page of yogurt items.
 
-The script **makes an HTTP GET** with Python’s standard library (`urllib.request`), reads UTF-8 JSON, and **parses** it with `json.loads`. From each product I **extract** at least three fields: barcode (`code`), `product_name`, and `nutrition_grades` (Nutri-Score letter when Open Food Facts has one). I also derive a short English category label from `categories_tags_en` (the last tag in the list) for readability. I **print** those values to the terminal and **save** the same rows to `openfoodfacts_search_sample.csv` for use outside the script.
+The script makes an HTTP request with Python (`urllib.request`), parses the JSON response (`json.loads`), and extracts yogurt-related product fields into a clean table. For each returned yogurt item, I extract:
+- `code` (barcode)
+- `product_name`
+- `nutrition_grades` (Nutri-Score letter)
+- `categories_tags_en` (used to derive a readable yogurt category leaf)
 
-Read-only search on the public Open Food Facts server **does not require an API key**. I still added **`.gitignore`** with `.env` in this folder so any future secret (for example a key loaded with `os.environ.get(...)`) would not be committed to a public repository, which matches the course expectation for **handling credentials safely**.
+This produced yogurt records such as **"Key Lime Flavored Yogurt"**, **"Greek Style Thick & Creamy Natural Yogurt"**, and **"Greek Yogurt Vanilla"** in `openfoodfacts_search_sample.csv`. I print these yogurt results in the terminal and save the same rows to CSV for analysis.
+
+Read-only search on Open Food Facts does not require an API key. I still included `.gitignore` with `.env` in this folder so any future API secret (loaded with `os.environ.get(...)`) stays out of version control, which demonstrates safe credential handling.
