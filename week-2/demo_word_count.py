@@ -5,6 +5,7 @@ import csv
 filename = "demo_responses.csv"
 responses = []
 
+# code that reads the csv file and stores the results in a list of dictionaries using the csv.DictReader function
 with open(filename, newline="", encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
@@ -20,13 +21,13 @@ def count_words(response):
     return len(response.split())
 
 
-# Count words in each response and print a row-by-row summary
+# Count words in each response and print a row-by-row summary in a table
 print(f"{'ID':<6} {'Role':<22} {'Words':<6} {'Response (first 60 chars)'}")
 print("-" * 75)
 
 word_counts = []
 
-# loop through each response and count the words
+# The below code loops through each response and count the words 
 for row in responses:
     participant = row["participant_id"]
     role = row["role"]
@@ -44,7 +45,7 @@ for row in responses:
 
     print(f"{participant:<6} {role:<22} {count:<6} {preview}")
 
-# Print summary statistics
+# Print summary statistics in a table
 print()
 print("── Summary ─────────────────────────────────")
 print(f"  Total responses : {len(word_counts)}")
